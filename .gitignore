@@ -11,9 +11,6 @@ build/
 ipch/
 *.obj
 *.exe
-*.dll
-*.lib
-!enet64.lib
 *.pdb
 *.idb
 *.iobj
