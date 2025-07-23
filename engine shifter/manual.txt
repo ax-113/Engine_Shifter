@@ -1,0 +1,61 @@
+DISCORD:
+https://discord.gg/jE7q8QuK
+
+CAN EDIT:
+- main.cpp:
+	#regions:
+	- windows values
+		change stuff on the window itself
+	- start_event
+		everything that needs to be called once, at the start of the game
+	- update_event
+		everything that needs to be chack each frame of the game
+	- draw_event
+		everything you need to draw and update
+
+DRAWING FUNTIONS:
+
+- load_animation_spritesheet
+	goes on start_event, prepares the spritesheet to animate. RETURNS ANIMATION VARIABLE
+- animation_draw
+	goes on update_event, switchs between frames prepared on load_animation_spritesheet.
+- load_sprite
+	goes in the start_event, prepares the texture and sprite image from the path. RETURNS SPRITE VARIABLE
+- sprite_draw
+	goes in the update_event, draws a single frame sprite.
+- load_tileset
+	goes in the start_event, prepares the tileset from the path. RETURNS TILESET VARIABLE
+- tile_draw
+	goes in the update_event, draws a specific tile on a tileset.
+
+MUSIC FUNTIONS:
+
+- load_music
+	goes in the start_event, prepares the music. RETURNS MUSIC VARIABLE
+- music_play
+	goeas in the update_event or in the start_event, plays music when not playing.
+
+INPUT FUNTIONS:
+
+- check_key_press
+	goes in the update_event, gives true if the letter from the int is being pressed [LOWER CASE ONLY]. RETURNS T/F
+- click_on_sprite
+	goes in the update_event, gives true if the button said is baing pressed inside the sprite. [1 for left, 2 for right, 3 for middle] RETURNS T/F
+- check_other_down
+	goes in the update_event, gives true if the key_id from the int is being pressed. RETURNS T/F 
+	ids{
+	1: up
+	2: down
+	3: left
+	4: right
+	5: left control
+	6: left shift
+	7: tab
+	8: enter
+	9: escape
+	}
+
+COLLISION FUNTIONS:
+
+- check_collision
+	goes in update_event, checks if sprite 1 collides with sprite 2. RETURNS T/F

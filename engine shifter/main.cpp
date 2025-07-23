@@ -1,0 +1,290 @@
+#include <SFML/Audio.hpp>
+#include <SFML/Graphics.hpp>
+#include <cstdlib>
+#include "funtions.h"
+#include <iostream>
+#include <cmath>
+#include <enet/enet.h>
+#include <cstring>
+
+int main()
+{
+    bool multiplayer = true;
+
+    if (!multiplayer)
+    {
+        int gameWidth = 512; //game width in pixel size
+        int gameHeight = 288; //game height in pixel size
+        std::string name = "Game 1"; //game name
+        std::string icon_path = "C:/Users/axelc/downloads/flower.png"; // change the window icon (full path)
+        //if you want a camera use this
+        int cameraWidth = gameWidth; //camera width in pixel size
+        int cameraHeight = gameHeight; //camera height in pixel size
+        sf::RenderWindow window(sf::VideoMode(gameWidth, gameHeight), name);
+
+        sf::Image icon;
+        if (!icon.loadFromFile(icon_path)) { std::cerr << "Failed to load image" << icon_path; }
+        window.setIcon(icon.getSize().x, icon.getSize().y, icon.getPixelsPtr());
+
+        sf::View camara(sf::FloatRect(0, 0, cameraWidth, cameraHeight));
+
+        sf::Sprite red;
+        sf::Texture red_tex = load_sprite("C:/Users/axelc/Downloads/red.png");
+        red.setTexture(red_tex);
+        sf::Sprite blue;
+        sf::Texture blue_tex = load_sprite("C:/Users/axelc/Downloads/blue.png");
+        blue.setTexture(blue_tex);
+
+        red.setPosition(gameWidth / 2.0f, gameHeight / 2.0f);
+        blue.setPosition(gameWidth / 2.0f + 120.0f, gameHeight / 2.0f);
+        float speed = 0.1;
+
+        while (window.isOpen())
+        {
+            window.setView(camara);
+
+            sf::Event event;
+            while (window.pollEvent(event))
+            {
+                if (event.type == sf::Event::Closed)
+                    window.close();
+            }
+
+            if (check_letter_down('d')) { red.move(speed, 0); }
+            if (check_letter_down('a')) { red.move(-speed, 0); }
+            if (check_letter_down('s')) { red.move(0, speed); }
+            if (check_letter_down('w')) { red.move(0, -speed); }
+
+            if (check_other_down(4)) { blue.move(speed, 0); }
+            if (check_other_down(3)) { blue.move(-speed, 0); }
+            if (check_other_down(2)) { blue.move(0, speed); }
+            if (check_other_down(1)) { blue.move(0, -speed); }
+
+            window.clear();
+            sprite_draw(red, window);
+            sprite_draw(blue, window);
+            window.display();
+        }
+    }
+    if (multiplayer)
+    {
+        char type = 'x';
+        int gameWidth = 512;
+        int gameHeight = 288;
+        std::string name = "MULTIPLAYER";
+        std::string icon_path = "C:/Users/axelc/downloads/flower.png";
+        int cameraWidth = gameWidth;
+        int cameraHeight = gameHeight;
+        bool blue_connected = false;
+        sf::RenderWindow window(sf::VideoMode(gameWidth, gameHeight), name);
+        sf::Image icon;
+        if (!icon.loadFromFile(icon_path)) { std::cerr << "Failed to load image" << icon_path; }
+        window.setIcon(icon.getSize().x, icon.getSize().y, icon.getPixelsPtr());
+
+        sf::View camara(sf::FloatRect(0, 0, cameraWidth, cameraHeight));
+
+        sf::Sprite red;
+        sf::Texture red_tex = load_sprite("C:/Users/axelc/Downloads/red.png");
+        sf::Texture blue_tex = load_sprite("C:/Users/axelc/Downloads/blue.png");
+        red.setTexture(red_tex);
+        float speed = 0.1f;
+        float blue_x, blue_y;
+        std::string imagePath;
+        bool onetime = true;
+        sf::Sprite button1;
+        button1.setTexture(red_tex);
+        sf::Sprite button2;
+        button2.setTexture(blue_tex);
+
+        const char* ip = ""; // FILL ====================================
+
+        while (window.isOpen())
+        {
+            window.setView(camara);
+
+            sf::Event event;
+
+            while (window.pollEvent(event))
+            {
+                if (event.type == sf::Event::Closed)
+                    window.close();
+            }
+            if (click_on_sprite(1, button1, window))
+            {
+                type = 'c';
+            }
+            if (click_on_sprite(1, button2, window))
+            {
+                type = 's';
+            }
+            button1.setPosition(window.getSize().x / 4, window.getSize().y / 4);
+            button2.setPosition(window.getSize().x - (window.getSize().x / 4), window.getSize().y / 4);
+
+            window.clear();
+            sprite_draw(button1, window);
+            sprite_draw(button2, window);
+            window.display();
+            if (type == 'c')
+            {
+                ENetAddress address;
+                ENetEvent enet_event;
+                ENetPeer* peer = nullptr;
+                ENetHost* client = nullptr;
+                if (onetime)
+                {
+                    window.setTitle("Client");
+                    if (enet_initialize() != 0)
+                    {
+                        std::cerr << "failed to initialize enet on CLIENT\n";
+                        return EXIT_FAILURE;
+                    }
+                    atexit(enet_deinitialize);
+
+                    client = enet_host_create(NULL, 1, 1, 0, 0);
+                    if (client == NULL)
+                    {
+                        std::cerr << "failed to create CLIENT\n";
+                        return EXIT_FAILURE;
+                    }
+                    else { std::cerr << "Client Created succesfully\n"; }
+
+                    enet_address_set_host(&address, ip);
+                    address.port = 1234;
+
+                    peer = enet_host_connect(client, &address, 1, 0);
+                    if (peer == NULL)
+                    {
+                        std::cerr << "failed to connect\n";
+                        return EXIT_FAILURE;
+                    }
+
+                    if (enet_host_service(client, &enet_event, 5000) > 0 && enet_event.type == ENET_EVENT_TYPE_CONNECT)
+                    {
+                        std::cerr << "Conected succesfully\n";
+                    }
+                    else
+                    {
+                        enet_peer_reset(peer);
+                        std::cerr << "Failed to connect\n";
+                    }
+                    onetime = false;
+                }
+                while (enet_host_service(client, &enet_event, 1000) > 0)
+                {
+                    switch (enet_event.type)
+                    {
+                    case ENET_EVENT_TYPE_RECEIVE:
+                        const char* data = reinterpret_cast<const char*>(enet_event.packet->data);
+                        size_t offset = 0;
+
+                        // 1. Read length of image path
+                        uint32_t pathLength;
+                        memcpy(&pathLength, data + offset, sizeof(uint32_t));
+                        offset += sizeof(uint32_t);
+
+                        // 2. Read image path string (not null-terminated)
+                        imagePath = std::string(data + offset, pathLength);
+                        offset += pathLength;
+
+                        memcpy(&blue_x, data + offset, sizeof(float));
+                        offset += sizeof(float);
+                        memcpy(&blue_y, data + offset, sizeof(float));
+                        break;
+                        blue_connected = true;
+                    }
+                    if (blue_connected)
+                    {
+                        sf::Sprite blue;
+                        sf::Texture blue_tex = load_sprite(imagePath);
+                        blue.setPosition(blue_x, blue_y);
+                        blue.setTexture(blue_tex);
+                        window.clear();
+                        sprite_draw(blue, window);
+                    }
+                    if (check_letter_down('d')) { red.move(speed, 0); }
+                    if (check_letter_down('a')) { red.move(-speed, 0); }
+                    if (check_letter_down('s')) { red.move(0, speed); }
+                    if (check_letter_down('w')) { red.move(0, -speed); }
+
+                    sprite_draw(red, window);
+                    window.display();
+                }
+                enet_peer_disconnect(peer, 0);
+                while (enet_host_service(client, &enet_event, 3000) > 0)
+                {
+                    switch (enet_event.type)
+                    {
+                    case ENET_EVENT_TYPE_RECEIVE:
+                        enet_packet_destroy(enet_event.packet);
+                        break;
+                    case ENET_EVENT_TYPE_DISCONNECT:
+                        std::cerr << "Disconnection succeded\n";
+                    }
+                }
+            }
+            if (type == 's')
+            {
+                ENetEvent enet_event;
+                ENetHost* server = nullptr;
+                ENetAddress address;
+                if (onetime)
+                {
+                    window.setTitle("Server");
+                    if (enet_initialize() != 0)
+                    {
+                        std::cerr << "failed to initialize enet on server\n";
+                        return EXIT_FAILURE;
+                    }
+                    else {
+                        std::cerr << "server created\n";
+                    }
+                    atexit(enet_deinitialize);
+
+
+                    address.host = ENET_HOST_ANY;
+                    address.port = 1234;
+
+
+                    server = enet_host_create(&address, 2, 1, 0, 0);
+                    if (server == NULL)
+                    {
+                        std::cerr << "failed to start server";
+                        return EXIT_FAILURE;
+                    }
+                    else {
+                        std::cerr << "server started\n";
+                    }
+                    onetime = false;
+                }
+                while (window.isOpen())
+                {
+
+                    sf::Event event;
+                    while (window.pollEvent(event))
+                    {
+                        if (event.type == sf::Event::Closed)
+                            window.close();
+                    }
+                    window.clear();
+                    window.display();
+                }
+                while (enet_host_service(server, &enet_event, 1000) > 0)
+                {
+                    switch (enet_event.type)
+                    {
+                    case ENET_EVENT_TYPE_CONNECT:
+
+                    case ENET_EVENT_TYPE_RECEIVE:
+                        enet_packet_destroy(enet_event.packet);
+                        break;
+                    case ENET_EVENT_TYPE_DISCONNECT:
+                        std::cerr << "Disconnection succeded\n";
+                    }
+                }
+                enet_host_destroy(server);
+            }
+        }
+
+        return EXIT_SUCCESS;
+    }
+}
