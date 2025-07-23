@@ -72,7 +72,7 @@ int main()
         int gameWidth = 512;
         int gameHeight = 288;
         std::string name = "MULTIPLAYER";
-        std::string icon_path = "C:/Users/axelc/downloads/flower.png";
+        std::string icon_path = "";
         int cameraWidth = gameWidth;
         int cameraHeight = gameHeight;
         bool blue_connected = false;
