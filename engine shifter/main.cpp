@@ -72,7 +72,7 @@ int main()
         int gameWidth = 512;
         int gameHeight = 288;
         std::string name = "MULTIPLAYER";
-        std::string icon_path = "";
+        std::string icon_path = "resources/flower.png";
         int cameraWidth = gameWidth;
         int cameraHeight = gameHeight;
         bool blue_connected = false;
@@ -84,8 +84,8 @@ int main()
         sf::View camara(sf::FloatRect(0, 0, cameraWidth, cameraHeight));
 
         sf::Sprite red;
-        sf::Texture red_tex = load_sprite("C:/Users/axelc/Downloads/red.png");
-        sf::Texture blue_tex = load_sprite("C:/Users/axelc/Downloads/blue.png");
+        sf::Texture red_tex = load_sprite("resources/red.png");
+        sf::Texture blue_tex = load_sprite("resources/blue.png");
         red.setTexture(red_tex);
         float speed = 0.1f;
         float blue_x, blue_y;
