@@ -9,14 +9,14 @@
 
 int main()
 {
-    bool multiplayer = true;
+    bool multiplayer = false;
 
     if (!multiplayer)
     {
         int gameWidth = 512; //game width in pixel size
         int gameHeight = 288; //game height in pixel size
         std::string name = "Game 1"; //game name
-        std::string icon_path = "C:/Users/axelc/downloads/flower.png"; // change the window icon (full path)
+        std::string icon_path = "resources/flower.png"; // change the window icon (full path)
         //if you want a camera use this
         int cameraWidth = gameWidth; //camera width in pixel size
         int cameraHeight = gameHeight; //camera height in pixel size
@@ -29,10 +29,10 @@ int main()
         sf::View camara(sf::FloatRect(0, 0, cameraWidth, cameraHeight));
 
         sf::Sprite red;
-        sf::Texture red_tex = load_sprite("C:/Users/axelc/Downloads/red.png");
+        sf::Texture red_tex = load_sprite("resources/red.png");
         red.setTexture(red_tex);
         sf::Sprite blue;
-        sf::Texture blue_tex = load_sprite("C:/Users/axelc/Downloads/blue.png");
+        sf::Texture blue_tex = load_sprite("resources/blue.png");
         blue.setTexture(blue_tex);
 
         red.setPosition(gameWidth / 2.0f, gameHeight / 2.0f);
@@ -97,6 +97,7 @@ int main()
         button2.setTexture(blue_tex);
 
         const char* ip = ""; // FILL ====================================
+        const int port = 1234; // FILL ==================================
 
         while (window.isOpen())
         {
@@ -107,22 +108,12 @@ int main()
             while (window.pollEvent(event))
             {
                 if (event.type == sf::Event::Closed)
+                {
                     window.close();
+                }
             }
-            if (click_on_sprite(1, button1, window))
-            {
-                type = 'c';
-            }
-            if (click_on_sprite(1, button2, window))
-            {
-                type = 's';
-            }
-            button1.setPosition(window.getSize().x / 4, window.getSize().y / 4);
-            button2.setPosition(window.getSize().x - (window.getSize().x / 4), window.getSize().y / 4);
-
             window.clear();
-            sprite_draw(button1, window);
-            sprite_draw(button2, window);
+
             window.display();
             if (type == 'c')
             {
@@ -149,7 +140,7 @@ int main()
                     else { std::cerr << "Client Created succesfully\n"; }
 
                     enet_address_set_host(&address, ip);
-                    address.port = 1234;
+                    address.port = port;
 
                     peer = enet_host_connect(client, &address, 1, 0);
                     if (peer == NULL)
@@ -157,6 +148,8 @@ int main()
                         std::cerr << "failed to connect\n";
                         return EXIT_FAILURE;
                     }
+
+                    enet_host_flush(client);
 
                     if (enet_host_service(client, &enet_event, 5000) > 0 && enet_event.type == ENET_EVENT_TYPE_CONNECT)
                     {
@@ -174,39 +167,8 @@ int main()
                     switch (enet_event.type)
                     {
                     case ENET_EVENT_TYPE_RECEIVE:
-                        const char* data = reinterpret_cast<const char*>(enet_event.packet->data);
-                        size_t offset = 0;
-
-                        // 1. Read length of image path
-                        uint32_t pathLength;
-                        memcpy(&pathLength, data + offset, sizeof(uint32_t));
-                        offset += sizeof(uint32_t);
-
-                        // 2. Read image path string (not null-terminated)
-                        imagePath = std::string(data + offset, pathLength);
-                        offset += pathLength;
-
-                        memcpy(&blue_x, data + offset, sizeof(float));
-                        offset += sizeof(float);
-                        memcpy(&blue_y, data + offset, sizeof(float));
                         break;
-                        blue_connected = true;
                     }
-                    if (blue_connected)
-                    {
-                        sf::Sprite blue;
-                        sf::Texture blue_tex = load_sprite(imagePath);
-                        blue.setPosition(blue_x, blue_y);
-                        blue.setTexture(blue_tex);
-                        window.clear();
-                        sprite_draw(blue, window);
-                    }
-                    if (check_letter_down('d')) { red.move(speed, 0); }
-                    if (check_letter_down('a')) { red.move(-speed, 0); }
-                    if (check_letter_down('s')) { red.move(0, speed); }
-                    if (check_letter_down('w')) { red.move(0, -speed); }
-
-                    sprite_draw(red, window);
                     window.display();
                 }
                 enet_peer_disconnect(peer, 0);
@@ -235,14 +197,15 @@ int main()
                         std::cerr << "failed to initialize enet on server\n";
                         return EXIT_FAILURE;
                     }
-                    else {
+                    else
+                    {
                         std::cerr << "server created\n";
                     }
                     atexit(enet_deinitialize);
 
 
                     address.host = ENET_HOST_ANY;
-                    address.port = 1234;
+                    address.port = port;
 
 
                     server = enet_host_create(&address, 2, 1, 0, 0);
@@ -251,7 +214,8 @@ int main()
                         std::cerr << "failed to start server";
                         return EXIT_FAILURE;
                     }
-                    else {
+                    else
+                    {
                         std::cerr << "server started\n";
                     }
                     onetime = false;

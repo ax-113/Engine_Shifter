@@ -4,8 +4,8 @@
 #include <cstdlib>
 #include <ctime>
 #include <string>
-void randomize();
 
+void randomize();
 sf::Sprite load_animation_spritesheet(sf::Sprite sprite, int frame_width, int frame_height);
 void animation_draw(int amount_sprites_in_column, int row_to_draw, int frame_width, int frame_height, sf::Sprite sprite, float maxTime, sf::RenderWindow WINDOW, int timer, int temp_val);
 sf::Texture load_sprite(std::string path);

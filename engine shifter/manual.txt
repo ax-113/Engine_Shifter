@@ -3,15 +3,6 @@ https://discord.gg/jE7q8QuK
 
 CAN EDIT:
 - main.cpp:
-	#regions:
-	- windows values
-		change stuff on the window itself
-	- start_event
-		everything that needs to be called once, at the start of the game
-	- update_event
-		everything that needs to be chack each frame of the game
-	- draw_event
-		everything you need to draw and update
 
 DRAWING FUNTIONS:
 
