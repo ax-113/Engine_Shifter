@@ -82,15 +82,13 @@ int main()
         window.setIcon(icon.getSize().x, icon.getSize().y, icon.getPixelsPtr());
 
         sf::View camara(sf::FloatRect(0, 0, cameraWidth, cameraHeight));
-
+        
+        bool onetime = true;
+        
         sf::Sprite red;
         sf::Texture red_tex = load_sprite("resources/red.png");
         sf::Texture blue_tex = load_sprite("resources/blue.png");
         red.setTexture(red_tex);
-        float speed = 0.1f;
-        float blue_x, blue_y;
-        std::string imagePath;
-        bool onetime = true;
         sf::Sprite button1;
         button1.setTexture(red_tex);
         sf::Sprite button2;
