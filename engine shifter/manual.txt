@@ -8,8 +8,6 @@ DRAWING FUNTIONS:
 
 - load_animation_spritesheet
 	goes on start_event, prepares the spritesheet to animate. RETURNS ANIMATION VARIABLE
-- animation_draw
-	goes on update_event, switchs between frames prepared on load_animation_spritesheet.
 - load_sprite
 	goes in the start_event, prepares the texture and sprite image from the path. RETURNS SPRITE VARIABLE
 - sprite_draw
@@ -17,7 +15,7 @@ DRAWING FUNTIONS:
 - load_tileset
 	goes in the start_event, prepares the tileset from the path. RETURNS TILESET VARIABLE
 - tile_draw
-	goes in the update_event, draws a specific tile on a tileset.
+	goes in the update_event, draws a specific tile on a tileset (for animations too).
 
 MUSIC FUNTIONS:
 

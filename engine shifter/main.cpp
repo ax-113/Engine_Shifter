@@ -29,7 +29,7 @@ int main()
         sf::View camara(sf::FloatRect(0, 0, cameraWidth, cameraHeight));
 
         sf::Sprite red;
-        sf::Texture red_tex = load_sprite("resources/red.png");
+        sf::Texture red_tex = Engine_Shifter::load_sprite("resources/red.png");
         red.setTexture(red_tex);
         sf::Sprite blue;
         sf::Texture blue_tex = load_sprite("resources/blue.png");
