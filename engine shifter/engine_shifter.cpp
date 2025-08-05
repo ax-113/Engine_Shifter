@@ -4,14 +4,9 @@
 #include <ctime>
 #include <string>
 #include <iostream>
-#include "funtions.h"
 
 namespace Engine_Shifter
 {
-	void randomize() {
-		std::srand(static_cast<unsigned int>(std::time(NULL)));
-	}
-
 	sf::Sprite load_animation_spritesheet(sf::Sprite sprite, int frame_width, int frame_height) {
 		sprite.setTextureRect({ {0,0},{frame_width,frame_height} });
 		sprite.setOrigin({ sprite.getTextureRect().width / 2.0f, sprite.getTextureRect().height / 2.0f });

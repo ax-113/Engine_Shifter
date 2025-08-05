@@ -1,7 +1,7 @@
 #include <SFML/Audio.hpp>
 #include <SFML/Graphics.hpp>
 #include <cstdlib>
-#include "funtions.h"
+#include "engine_shifter.cpp"
 #include <iostream>
 #include <cmath>
 #include <enet/enet.h>
@@ -28,12 +28,9 @@ int main()
 
         sf::View camara(sf::FloatRect(0, 0, cameraWidth, cameraHeight));
 
-        sf::Sprite red;
-        sf::Texture red_tex = Engine_Shifter::load_sprite("resources/red.png");
-        red.setTexture(red_tex);
-        sf::Sprite blue;
-        sf::Texture blue_tex = load_sprite("resources/blue.png");
-        blue.setTexture(blue_tex);
+        sf::Texture red_tex, blue_tex;
+        sf::Sprite red = Engine_Shifter::load_sprite(red_tex, "resources/red.png");
+        sf::Sprite blue = Engine_Shifter::load_sprite(blue_tex, "resources/blue.png");
 
         red.setPosition(gameWidth / 2.0f, gameHeight / 2.0f);
         blue.setPosition(gameWidth / 2.0f + 120.0f, gameHeight / 2.0f);
@@ -50,19 +47,19 @@ int main()
                     window.close();
             }
 
-            if (check_letter_down('d')) { red.move(speed, 0); }
-            if (check_letter_down('a')) { red.move(-speed, 0); }
-            if (check_letter_down('s')) { red.move(0, speed); }
-            if (check_letter_down('w')) { red.move(0, -speed); }
+            if (Engine_Shifter::check_letter_down('d')) { red.move(speed, 0); }
+            if (Engine_Shifter::check_letter_down('a')) { red.move(-speed, 0); }
+            if (Engine_Shifter::check_letter_down('s')) { red.move(0, speed); }
+            if (Engine_Shifter::check_letter_down('w')) { red.move(0, -speed); }
 
-            if (check_other_down(4)) { blue.move(speed, 0); }
-            if (check_other_down(3)) { blue.move(-speed, 0); }
-            if (check_other_down(2)) { blue.move(0, speed); }
-            if (check_other_down(1)) { blue.move(0, -speed); }
+            if (Engine_Shifter::check_other_down(4)) { blue.move(speed, 0); }
+            if (Engine_Shifter::check_other_down(3)) { blue.move(-speed, 0); }
+            if (Engine_Shifter::check_other_down(2)) { blue.move(0, speed); }
+            if (Engine_Shifter::check_other_down(1)) { blue.move(0, -speed); }
 
             window.clear();
-            sprite_draw(red, window);
-            sprite_draw(blue, window);
+            Engine_Shifter::sprite_draw(red, window);
+            Engine_Shifter::sprite_draw(blue, window);
             window.display();
         }
     }
@@ -85,14 +82,9 @@ int main()
         
         bool onetime = true;
         
-        sf::Sprite red;
-        sf::Texture red_tex = load_sprite("resources/red.png");
-        sf::Texture blue_tex = load_sprite("resources/blue.png");
-        red.setTexture(red_tex);
-        sf::Sprite button1;
-        button1.setTexture(red_tex);
-        sf::Sprite button2;
-        button2.setTexture(blue_tex);
+        sf::Texture red_tex, blue_tex;
+        sf::Sprite red = Engine_Shifter::load_sprite(red_tex, "resources/red.png");
+        sf::Sprite blue = Engine_Shifter::load_sprite(blue_tex, "resources/blue.png");
 
         const char* ip = ""; // FILL ====================================
         const int port = 1234; // FILL ==================================

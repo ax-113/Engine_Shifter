@@ -4,6 +4,10 @@ https://discord.gg/jE7q8QuK
 CAN EDIT:
 - main.cpp:
 
+BASIC:
+
+- for everything in the engine you need to use Engine_Shifter:: then you can access the functions.
+
 DRAWING FUNTIONS:
 
 - load_animation_spritesheet

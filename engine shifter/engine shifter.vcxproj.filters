@@ -21,7 +21,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="funtions.cpp">
+    <ClCompile Include="engine_shifter.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="main.cpp">
@@ -659,9 +659,6 @@
     </ClInclude>
     <ClInclude Include="extlibs\include\SFML\Window\WindowStyle.hpp">
       <Filter>Libraries</Filter>
-    </ClInclude>
-    <ClInclude Include="funtions.h">
-      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

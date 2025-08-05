@@ -311,7 +311,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="funtions.cpp">
+    <ClCompile Include="engine_shifter.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Static|Win32'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Dynamic|Win32'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Static|Win32'">false</ExcludedFromBuild>
@@ -546,7 +546,6 @@
     <ClInclude Include="extlibs\include\SFML\Window\Window.hpp" />
     <ClInclude Include="extlibs\include\SFML\Window\WindowHandle.hpp" />
     <ClInclude Include="extlibs\include\SFML\Window\WindowStyle.hpp" />
-    <ClInclude Include="funtions.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="manual.txt" />
