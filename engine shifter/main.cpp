@@ -1,11 +1,11 @@
 #include <SFML/Audio.hpp>
 #include <SFML/Graphics.hpp>
 #include <cstdlib>
-#include "engine_shifter.cpp"
 #include <iostream>
 #include <cmath>
 #include <enet/enet.h>
 #include <cstring>
+#include "engine_shifter.h"
 
 int main()
 {
