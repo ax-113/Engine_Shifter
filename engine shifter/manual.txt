@@ -1,6 +1,10 @@
 DISCORD:
 https://discord.gg/jE7q8QuK
 
+SFML documentation: https://www.sfml-dev.org/documentation/2.5.1
+ENet documentation: http://enet.bespin.org/index.html
+Chipmunk documentation: https://chipmunk-physics.net/documentation.php
+
 CAN EDIT:
 - main.cpp:
 
