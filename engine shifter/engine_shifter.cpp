@@ -125,6 +125,9 @@ namespace Engine_Shifter
 		case 9:
 			return sf::Keyboard::isKeyPressed(sf::Keyboard::Escape);
 			break;
+		case 10:
+			return sf::Keyboard::isKeyPressed(sf::Keyboard::Space);
+			break;
 		}
 		return false;
 	}

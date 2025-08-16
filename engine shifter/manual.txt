@@ -46,6 +46,7 @@ INPUT FUNTIONS:
 	7: tab
 	8: enter
 	9: escape
+	10: space
 	}
 
 COLLISION FUNTIONS:
