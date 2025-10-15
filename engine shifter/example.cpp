@@ -23,29 +23,32 @@ int main() {
 
 	//create and configure world:
 	b2WorldDef wd = b2DefaultWorldDef();
-	wd.gravity = { 0.0f, -10.0f };
+	wd.gravity = { 0.0f, .0f };
 	b2WorldId world = b2CreateWorld(&wd);
 
-	sh::object player; // <- Create an object "player" #IMPORTANT
+	sh::object player("resources/red.png"); // <- Create an object "player" & asign it an image #IMPORTANT
 	player.set_type(0); // <- set type to dynamic
 	player.set_density(1.0); // <- set the density
-	player.set_image("resources/red.png"); // <- set image #IMPORTANT
 	player.create(world); // <- Create the body #IMPORTANT
 	player.set_pos(0, 0, scale); // <- Set the position of the object
 	player.circle(circle); // <- Add the shape #IMPORTANT
 
-	sh::object enemy; // <- Create an object "enemy" #IMPORTANT
+	sh::object enemy("resources/blue.png"); // <- Create an object "enemy" & asign it an image #IMPORTANT
 	enemy.set_type(0); // <- set type to dynamic
-	enemy.set_image("resources/blue.png"); // <- set image #IMPORTANT
 	enemy.create(world); // <- Create the body #IMPORTANT
-	enemy.set_pos(100, 100, scale); // <- Set the position of the object
+	enemy.set_pos(700, 500, scale); // <- Set the position of the object
 	enemy.polygon(polygon); // <- Finalize with adding the shape #IMPORTANT
 
-	sh::image health; // <- Create an image "health" #IMPORTANT
-	health.set_image("resources/flower.png"); // <- set image #IMPORTANT
-	health.set_pos(-100, -100);
+	sh::image health("resources/flower.png"); // <- Create an image "health" #IMPORTANT
+	health.set_pos(700, 0);
+
+	sf::Clock clock;
+	int player_spd = 100, enemy_spd = 15;
+	float deltaTime;
 
 	while (window.isOpen()) { // <- game loop start #IMPORTANT
+		deltaTime = clock.getElapsedTime().asSeconds();
+		clock.restart();
 		//manage events & input: #IMPORTANT
 		while (const std::optional event = window.pollEvent()) 
 		{
@@ -54,13 +57,13 @@ int main() {
 			}
 			if (event->is<sf::Event::KeyPressed>()) { // <- if any key is pressed
 				if (sh::check_letter_down('w')) {
-					player.move(0, 1, scale);
+					player.move(0, -player_spd * deltaTime, scale);
 				}if (sh::check_letter_down('s')) {
-					player.move(0, -1, scale);
+					player.move(0, player_spd * deltaTime, scale);
 				}if (sh::check_letter_down('a')) {
-					player.move(-1, 0, scale);
+					player.move(-player_spd * deltaTime, 0, scale);
 				}if (sh::check_letter_down('d')) {
-					player.move(1, 0, scale);
+					player.move(player_spd * deltaTime, 0, scale);
 				}
 			}
 		}
@@ -69,18 +72,18 @@ int main() {
 		diference_x = player.get_pos_x() - enemy.get_pos_x();
 		diference_y = player.get_pos_y() - enemy.get_pos_y();
 		if (diference_x > 0) {
-			enemy.move(1, 0, scale);
+			enemy.move(enemy_spd * deltaTime, 0, scale);
 		}
 		else if (diference_x < 0) {
-			enemy.move(-1, 0, scale);
+			enemy.move(-enemy_spd * deltaTime, 0, scale);
 		}
 		if (diference_y > 0) {
-			enemy.move(0, 1, scale);
+			enemy.move(0, enemy_spd * deltaTime, scale);
 		}
 		else if (diference_y < 0) {
-			enemy.move(0, -1, scale);
+			enemy.move(0, -enemy_spd * deltaTime, scale);
 		}
-
+		std::cout << deltaTime;
 		//draw everything: #IMPORTANT
 		window.clear();
 

@@ -8,8 +8,9 @@
 #include "engine_shifter.h"
 
 namespace sh{
-	object::object(): spr(tex) {}
-	image::image(): spr(tex) {}
+	object::object(std::string image_path) : tex(image_path), spr(tex) {}
+	image::image(std::string image_path) : tex(image_path), spr(tex) {}
+
 	void object::set_type(int type) {
 		switch (type) {
 		case 0:
@@ -57,17 +58,8 @@ namespace sh{
 			spr.move({ x, y });
 		}
 	}
-
-	void object::set_image(std::string path) {
-		tex.loadFromFile(path);
-		spr.setTexture(tex);
-	}
 	void object::draw(sf::RenderWindow& window) {
 		window.draw(spr);
-	}
-	void image::set_image(std::string path){
-		tex.loadFromFile(path);
-		spr.setTexture(tex);
 	}
 	sf::Sprite image::get_image() {
 		return spr;
@@ -76,7 +68,7 @@ namespace sh{
 		window.draw(spr);
 	}
 	void image::set_pos(float x, float y) {
-		spr.setPosition(sf::Vector2{ x, y });
+		spr.setPosition({ x, y });
 	}
 	sf::Sprite load_animation_spritesheet(sf::Sprite sprite, int frame_width, int frame_height) {
 		sprite.setTextureRect({ {0,0},{frame_width,frame_height} });

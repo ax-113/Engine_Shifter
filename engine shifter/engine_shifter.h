@@ -19,7 +19,7 @@ namespace sh {
 		b2ShapeDef sd = b2DefaultShapeDef();
 		b2ShapeId sh_id;
 	public:
-		object();
+		object(std::string path);
 		void set_type(int type);
 		void set_density(float density);
 		void circle(b2Circle circle);
@@ -28,7 +28,6 @@ namespace sh {
 		float get_pos_x();
 		float get_pos_y();
 		void move(float x, float y, int scale);
-		void set_image(std::string path);
 		void draw(sf::RenderWindow& window);
 		void create(b2WorldId world);
 	};
@@ -37,8 +36,7 @@ namespace sh {
 		sf::Texture tex;
 		sf::Sprite spr;
 	public:
-		image();
-		void set_image(std::string path);
+		image(std::string path);
 		sf::Sprite get_image();
 		void draw(sf::RenderWindow& window);
 		void set_pos(float x, float y);
