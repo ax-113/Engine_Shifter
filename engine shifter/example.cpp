@@ -42,7 +42,7 @@ int main() {
 	enemy.polygon(polygon); // <- Finalize with adding the shape #IMPORTANT
 
 	sh::image health; // <- Create an image "health" #IMPORTANT
-	health.set_image("resources.png"); // <- set image #IMPORTANT
+	health.set_image("resources/flower.png"); // <- set image #IMPORTANT
 	health.set_pos(-100, -100);
 
 	while (window.isOpen()) { // <- game loop start #IMPORTANT
