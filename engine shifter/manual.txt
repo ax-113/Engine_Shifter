@@ -1,9 +1,117 @@
-DISCORD:
+# Discord:
 https://discord.gg/jE7q8QuK
 
-SFML documentation: https://www.sfml-dev.org/documentation/2.5.1
+# Library docs:
+SFML documentation: https://www.sfml-dev.org/documentation/3.0.2
 Box2D documentation: https://box2d.org/documentation
 
-Classes: 
-image: drawable, nothing else
-object: drawable, movable, physics-able
+# Important:
+	- For everything within the engine, you must use the namespace "sh". Example: sh::click_on_sprite(0, spr_button, window);
+	- In example.cpp you can see the basics of an engine-shifter-game. (everything with #IMPORTANT is crucial)
+
+# Classes: 
+	image: drawable, nothing else
+	object: drawable, movable, physics-able
+
+ # Function List: (0: what does this function do?, 1: where does it go?, 2: what does it return?)
+
+object:
+	set_type(int type)
+		0: changes the type (0: dynamic, 1: static, 2: kinematic)
+		1: before the loop
+		2: nothing
+	set_density(float density)
+		0: changes the density (from 0 to 1.0)
+		1: before the loop
+		2: nothing
+	circle(b2Circle circle)
+		0: creates a circle shape
+		1: before the loop
+		2: nothing
+	polygon(b2Polygon polygon)
+		0: creates polygon shape
+		1: before the loop
+		2: nothing
+	set_pos(float x, float y, int scale)
+		0: sets the position of the object, you need to pass the scale of the project
+		1: anywhere
+		2: nothing
+	get_pos_x()
+		0: gives you the x position of the object
+		1: anywhere
+		2: float
+	get_pos_y()
+		0: gives you the y position of the object
+		1: anywhere
+		2: float
+	move(float x, float y, int scale)
+		0: moves from the actual position
+		1: in the loop
+		2: nothing
+	set_image(std::string path)
+		0: sets the image of the object, you give the path of the file
+		1: before the loop
+		2: nothing
+	draw(sf::RenderWindow& window)
+		0: draws the image from the object
+		1: in the loop (between clear and display)
+		2: nothing
+	create(b2WorldId world)
+		0: creates the object, this is very important
+		1: before the loop
+		2: nothing
+
+image:
+	void set_image(std::string path)
+		0: sets the image of the object, you give the path of the file
+		1: before the loop
+		2: nothing
+	get_image()
+		0: gives you the sf::Sprite asosiated to the image
+		1: anywhere
+		2: sf::Sprite
+	draw(sf::RenderWindow& window)
+		0: draws the image
+		1: in the loop (between clear and display)
+		2: nothing
+	set_pos(float x, float y)
+		0: sets the position of the image
+		1: anywhere
+		2: nothing
+regular:
+	load_animation_spritesheet(sf::Sprite sprite, int frame_width, int frame_height)
+		0: loads the spritesheet
+		1: before the loop
+		2: sf::Sprite (Rect)
+	sprite_draw(sf::Sprite sprite, sf::RenderWindow& WINDOW
+		0: draws an sf::Sprite
+		1: in the loop (between clear and display)
+		2: nothing
+	load_tileset(sf::Sprite sprite, int tile_width, int tile_height)
+		0: loads the tileset
+		1: before the loop
+		2: sf::Sprite (Rect)
+	tile_draw(sf::Sprite tilemap, sf::RenderWindow& WINDOW, int tile_width, int tile_height, int row, int column)
+		0: draws the tile
+		1: in the loop (between clear and display)
+		2: nothing
+	load_music(std::string& path)
+		0: loads a music file
+		1: before the loop
+		2: std::unique_ptr<sf::Music>
+	music_play(std::unique_ptr<sf::Music> music)
+		0: plays the music
+		1: anywhere
+		2: nothing
+	check_letter_down(char letter)
+		0: checks if a letter key is pressed
+		1: in the loop
+		2: True/False
+	click_on_sprite(int button, sf::Sprite& sprite, sf::RenderWindow& WINDOW)
+		0: checks if a sprite is being clicked
+		1: in the loop
+		2: True/False
+	check_other_down(int key_id)
+		0: checks if a any key is pressed (0: space, 1: up, 2: down, 3: left, 4: right, 5: left control, 6: left shift, 7: tab, 8: enter, 9: escape)
+		1: in the loop
+		2: True/False

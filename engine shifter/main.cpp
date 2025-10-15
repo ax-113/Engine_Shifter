@@ -5,10 +5,11 @@
 #include <iostream>
 #include <cmath>
 #include <cstring>
-#include "engine_shifter.cpp"
 
 int main() {
 	sf::RenderWindow window(sf::VideoMode({800, 600}), "SFML window");
+
+
 
 	while (window.isOpen()) {
 		while (const std::optional event = window.pollEvent())

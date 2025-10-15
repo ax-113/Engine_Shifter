@@ -7,18 +7,10 @@
 #include <cstring>
 #include "engine_shifter.h"
 
-//classes
-class object {
-private:
-	b2BodyDef bd = b2DefaultBodyDef();
-	b2BodyId bd_id;
-	b2ShapeDef shapeDef = b2DefaultShapeDef();
-	sf::Texture tex;
-	sf::Sprite spr;
-	b2ShapeDef sd = b2DefaultShapeDef();
-	b2ShapeId sh_id;
-public:
-	void set_type(int type) {
+namespace sh{
+	object::object(): spr(tex) {}
+	image::image(): spr(tex) {}
+	void object::set_type(int type) {
 		switch (type) {
 		case 0:
 			bd.type = b2_dynamicBody;
@@ -31,57 +23,61 @@ public:
 			break;
 		}
 	}
-	void set_density() {
-		sd.density = 1.0f;
+	void object::set_density(float density) {
+		sd.density = density;
 	}
-	void circle(b2Circle circle) {
+	void object::create(b2WorldId world) {
+		bd_id = b2CreateBody(world, &bd);
+	}
+	void object::circle(b2Circle circle) {
 		b2CreateCircleShape(bd_id, &sd, &circle);
 	}
-	void polygon(b2Polygon polygon) {
+	void object::polygon(b2Polygon polygon) {
 		b2CreatePolygonShape(bd_id, &sd, &polygon);
 	}
-	void set_pos(float x, float y) {
-		bd.position = b2Vec2{ x, y };
-		spr.setPosition({ x,y });
+	float object::get_pos_x() {
+		return spr.getPosition().x;
 	}
-	float get_pos_x() {
-		return bd.position.x;
+	float object::get_pos_y() {
+		return spr.getPosition().y;
 	}
-	float get_pos_y() {
-		return bd.position.y;
+	void object::set_pos(float x, float y, int scale) {
+		if (b2Body_IsValid(bd_id)) {
+			b2Rot R = b2Body_GetRotation(bd_id);
+			b2Body_SetTransform(bd_id, b2Vec2{x / scale, y / scale}, R);
+			spr.setPosition({ x, y });
+		}
 	}
-	void move(float x, float y) {
-		bd.position = b2Vec2{ bd.position.x + x, bd.position.y + y };
-		spr.move({ x, y });
+
+	void object::move(float x, float y, int scale) {
+		if (b2Body_IsValid(bd_id)) {
+			b2Transform T = b2Body_GetTransform(bd_id);
+			b2Rot R = b2Body_GetRotation(bd_id);
+			b2Body_SetTransform(bd_id, b2Vec2{ T.p.x + (x / scale), T.p.y + (y / scale) }, R);
+			spr.move({ x, y });
+		}
 	}
-	void set_image(std::string path) {
+
+	void object::set_image(std::string path) {
 		tex.loadFromFile(path);
 		spr.setTexture(tex);
 	}
-	void draw(sf::RenderWindow window) {
+	void object::draw(sf::RenderWindow& window) {
 		window.draw(spr);
 	}
-};
-class image {
-private:
-	sf::Texture tex;
-	sf::Sprite spr;
-public:
-	void set_image(std::string path){
+	void image::set_image(std::string path){
 		tex.loadFromFile(path);
 		spr.setTexture(tex);
 	}
-	sf::Sprite get_image() {
+	sf::Sprite image::get_image() {
 		return spr;
 	}
-	void draw(sf::RenderWindow window) {
+	void image::draw(sf::RenderWindow& window) {
 		window.draw(spr);
 	}
-};
-
-//functions
-namespace Engine_Shifter
-{
+	void image::set_pos(float x, float y) {
+		spr.setPosition(sf::Vector2{ x, y });
+	}
 	sf::Sprite load_animation_spritesheet(sf::Sprite sprite, int frame_width, int frame_height) {
 		sprite.setTextureRect({ {0,0},{frame_width,frame_height} });
 		sprite.setOrigin({ sprite.getTextureRect().size.x / 2.0f, sprite.getTextureRect().size.y / 2.0f });
@@ -134,13 +130,13 @@ namespace Engine_Shifter
 		sf::Vector2i mouse_position = sf::Mouse::getPosition(WINDOW);
 		sf::Mouse::Button temp;
 		switch (button) {
-		case (1):
+		case (0):
 			temp = sf::Mouse::Button::Left;
 			break;
-		case (2):
+		case (1):
 			temp = sf::Mouse::Button::Right;
 			break;
-		case (3):
+		case (2):
 			temp = sf::Mouse::Button::Middle;
 			break;
 		}
@@ -183,7 +179,7 @@ namespace Engine_Shifter
 		case 9:
 			return sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::Escape);
 			break;
-		case 10:
+		case 0:
 			return sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::Space);
 			break;
 		}
