@@ -21,7 +21,7 @@ int main() {
 	sf::RenderWindow window(sf::VideoMode({800,600}), window_name); // <- create window #IMPORTANT
 	//prepare stuff:
 
-	//create and configure world:
+	//create and configure world: #IMPORTANT
 	b2WorldDef wd = b2DefaultWorldDef();
 	wd.gravity = { 0.0f, .0f };
 	b2WorldId world = b2CreateWorld(&wd);
@@ -38,6 +38,7 @@ int main() {
 	enemy.create(world); // <- Create the body #IMPORTANT
 	enemy.set_pos(700, 500, scale); // <- Set the position of the object
 	enemy.polygon(polygon); // <- Finalize with adding the shape #IMPORTANT
+	sf::Sprite enemy_spr = enemy.get_spr();
 
 	sh::image health("resources/flower.png"); // <- Create an image "health" #IMPORTANT
 	health.set_pos(700, 0);
@@ -45,6 +46,7 @@ int main() {
 	sf::Clock clock;
 	int player_spd = 100, enemy_spd = 15;
 	float deltaTime;
+	bool is_enemy_alive = true;
 
 	while (window.isOpen()) { // <- game loop start #IMPORTANT
 		deltaTime = clock.getElapsedTime().asSeconds();
@@ -66,6 +68,11 @@ int main() {
 					player.move(player_spd * deltaTime, 0, scale);
 				}
 			}
+			if (event->is<sf::Event::MouseButtonPressed>()) { // <- if any mouse button is pressed
+				if (sh::click_on_sprite(0, enemy_spr, window)) {
+					is_enemy_alive = false;
+				}
+			}
 		}
 		b2World_Step(world, step, 1); // <- make a step on the "physics world" #IMPORTANT
 		//process data: #IMPORTANT
@@ -83,12 +90,13 @@ int main() {
 		else if (diference_y < 0) {
 			enemy.move(0, -enemy_spd * deltaTime, scale);
 		}
-		std::cout << deltaTime;
 		//draw everything: #IMPORTANT
 		window.clear();
 
 		player.draw(window);
-		enemy.draw(window);
+		if (is_enemy_alive) {
+			enemy.draw(window);
+		}
 		health.draw(window);
 
 		window.display();

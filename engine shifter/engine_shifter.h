@@ -13,7 +13,6 @@ namespace sh {
 	private:
 		b2BodyDef bd = b2DefaultBodyDef();
 		b2BodyId bd_id;
-		b2ShapeDef shapeDef = b2DefaultShapeDef();
 		sf::Texture tex;
 		sf::Sprite spr;
 		b2ShapeDef sd = b2DefaultShapeDef();
@@ -30,6 +29,7 @@ namespace sh {
 		void move(float x, float y, int scale);
 		void draw(sf::RenderWindow& window);
 		void create(b2WorldId world);
+		sf::Sprite get_spr();
 	};
 	class image {
 	private:
@@ -52,4 +52,3 @@ namespace sh {
 	bool click_on_sprite(int button, sf::Sprite& sprite, sf::RenderWindow& WINDOW);
 	bool check_other_down(int key_id);
 }
-

@@ -61,6 +61,9 @@ namespace sh{
 	void object::draw(sf::RenderWindow& window) {
 		window.draw(spr);
 	}
+	sf::Sprite object::get_spr() {
+		return spr;
+	}
 	sf::Sprite image::get_image() {
 		return spr;
 	}
