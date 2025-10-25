@@ -120,9 +120,10 @@ namespace sh{
 		return false;
 	}
 
-	bool click_on_sprite(int button, sf::Sprite& sprite, sf::RenderWindow& WINDOW)
+	bool click_on_sprite(int button, sf::Sprite& sprite, sf::RenderWindow& WINDOW, sf::View& view)
 	{
 		sf::Vector2i mouse_position = sf::Mouse::getPosition(WINDOW);
+		sf::Vector2f mouse_position2 = WINDOW.mapPixelToCoords(mouse_position, view);
 		sf::Mouse::Button temp;
 		switch (button) {
 		case (0):
@@ -135,12 +136,7 @@ namespace sh{
 			temp = sf::Mouse::Button::Middle;
 			break;
 		}
-
-		if (sf::Mouse::isButtonPressed(temp) && sprite.getGlobalBounds().contains(static_cast<sf::Vector2f>(mouse_position)))
-		{
-			return true;
-		}
-
+		return sf::Mouse::isButtonPressed(temp) && sprite.getGlobalBounds().contains(mouse_position2);
 	}
 
 	bool check_other_down(int key_id)

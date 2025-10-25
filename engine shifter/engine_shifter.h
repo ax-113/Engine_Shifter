@@ -49,6 +49,6 @@ namespace sh {
 	std::unique_ptr<sf::Music> load_music(std::string& path);
 	void music_play(std::unique_ptr<sf::Music> music);
 	bool check_letter_down(char letter);
-	bool click_on_sprite(int button, sf::Sprite& sprite, sf::RenderWindow& WINDOW);
+	bool click_on_sprite(int button, sf::Sprite& sprite, sf::RenderWindow& WINDOW, sf::View& view);
 	bool check_other_down(int key_id);
 }
